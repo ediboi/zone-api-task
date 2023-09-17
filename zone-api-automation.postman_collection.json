@@ -1,0 +1,759 @@
+{
+	"info": {
+		"_postman_id": "21178da1-8aa2-417a-ae65-6d87bd903fbf",
+		"name": "Zone API Automation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19148164",
+		"_collection_link": "https://interstellar-flare-983310.postman.co/workspace/ILS---IDS~a7c5cc75-f6ea-4442-b708-f2dcb09c8ce5/collection/19148164-21178da1-8aa2-417a-ae65-6d87bd903fbf?action=share&source=collection_link&creator=19148164"
+	},
+	"item": [
+		{
+			"name": "Fetch All Activities",
+			"item": [
+				{
+					"name": "Fetch All Activities - Valid Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the activity object\", function () {",
+									"  const responseData = pm.response.json();",
+									"",
+									"  pm.expect(responseData).to.be.an('array');",
+									"  ",
+									"  responseData.forEach(function(activity) {",
+									"    pm.expect(activity).to.have.property('id').that.is.a('number');",
+									"    pm.expect(activity).to.have.property('title').that.is.a('string');",
+									"    pm.expect(activity).to.have.property('dueDate').that.is.a('string');",
+									"    pm.expect(activity).to.have.property('completed').that.is.a('boolean');",
+									"  });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Title is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('array');",
+									"    pm.expect(responseData).to.have.lengthOf.at.least(1, \"Array should not be empty\");",
+									"",
+									"    responseData.forEach(function (activity) {",
+									"        pm.expect(activity.title).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array');",
+									"    ",
+									"    responseData.forEach(function(activity) {",
+									"        pm.expect(activity).to.be.an('object');",
+									"        pm.expect(activity.id).to.exist.and.to.be.a('number');",
+									"        pm.expect(activity.title).to.exist.and.to.be.a('string');",
+									"        pm.expect(activity.dueDate).to.exist.and.to.be.a('string');",
+									"        pm.expect(activity.completed).to.exist.and.to.be.a('boolean');",
+									"    });",
+									"});",
+									"",
+									"pm.test(\"Test that id is a non-negative integer\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('array');",
+									"  ",
+									"  responseData.forEach(function (activity) {",
+									"    pm.expect(activity.id).to.be.a('number').and.to.satisfy(function (id) {",
+									"      return id >= 0;",
+									"    });",
+									"  });",
+									"});",
+									"",
+									"",
+									"",
+									"pm.test(\"completed is a boolean value\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('array');",
+									"    responseData.forEach(function(activity) {",
+									"        pm.expect(activity.completed).to.be.a('boolean');",
+									"    });",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base url}}/{{base path}}",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"{{base path}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch all activities - Invalid method",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 415\", function () {",
+									"  pm.response.to.have.status(415);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has required fields\", function () {",
+									"  const responseData = pm.response.json();",
+									"",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.type).to.exist.and.to.be.a('string');",
+									"  pm.expect(responseData.title).to.exist.and.to.be.a('string');",
+									"  pm.expect(responseData.status).to.exist.and.to.be.a('number');",
+									"  pm.expect(responseData.traceId).to.exist.and.to.be.a('string');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Type is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.type).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Title is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.title).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Title should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Status is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.status).to.exist.and.to.be.a('number');",
+									"    pm.expect(responseData.status).to.be.at.least(0);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base url}}/{{base path}}",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"{{base path}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Fetch Specific Activity",
+			"item": [
+				{
+					"name": "Fetch Activity 3 - Valid Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Id is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.id).to.exist.and.to.be.a('number');",
+									"    pm.expect(responseData.id).to.be.at.least(0, \"Id should be a non-negative integer\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Title is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.title).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+									"});",
+									"",
+									"pm.test(\"Completed is a boolean value\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.completed).to.be.a('boolean');",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base url}}/{{base path}}/3",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"{{base path}}",
+								"3"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Activity - Invalid ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});",
+									"",
+									"",
+									"  pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.type).to.exist.and.to.be.a('string');",
+									"    pm.expect(responseData.title).to.exist.and.to.be.a('string');",
+									"    pm.expect(responseData.status).to.exist.and.to.be.a('number');",
+									"    pm.expect(responseData.traceId).to.exist.and.to.be.a('string');",
+									"  });",
+									"",
+									"",
+									"pm.test(\"Type is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.type).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Type should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Title is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData.title).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Title should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Status is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.status).to.be.a('number');",
+									"    pm.expect(responseData.status).to.be.at.least(0);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base url}}/{{base path}}/34",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"{{base path}}",
+								"34"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch Activity - Invalid Method",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 405\", function () {",
+									"    pm.response.to.have.status(405);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base url}}/{{base path}}/3",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"{{base path}}",
+								"3"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create An Activity",
+			"item": [
+				{
+					"name": "Create Activity - Valid Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Id is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.id).to.be.a('number');",
+									"    pm.expect(responseData.id).to.be.at.least(0);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Title is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.title).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Completed is a boolean value\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData.completed).to.be.a('boolean');",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 300,\r\n  \"title\": \"Activity 300\",\r\n  \"dueDate\": \"2023-09-17T17:05:09.589Z\",\r\n  \"completed\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base url}}/{{base path}}",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"{{base path}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Activity - Empty ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 400\", function () {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.include.all.keys('type', 'title', 'status', 'traceId', 'errors');",
+									"});",
+									"",
+									"pm.test(\"Response has valid information\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.title).to.be.eql(\"One or more validation errors occurred.\");",
+									"    pm.expect(responseData.status).to.be.eql(400);",
+									"    pm.expect(responseData.errors[\"$.id\"][0]).to.be.eql(\"',' is an invalid start of a value. Path: $.id | LineNumber: 1 | BytePositionInLine: 8.\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Type is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.type).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Type should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Title is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.title).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Title should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Status is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.status).to.be.a('number');",
+									"    pm.expect(responseData.status).to.be.at.least(0);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": ,\r\n  \"title\": \"Activity 300\",\r\n  \"dueDate\": \"2023-09-17T17:05:09.589Z\",\r\n  \"completed\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base url}}/{{base path}}",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"{{base path}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Activity - Empty Title",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 400\", function () {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.include.all.keys('type', 'title', 'status', 'traceId', 'errors');",
+									"});",
+									"",
+									"pm.test(\"Response has valid information\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.title).to.be.eql(\"One or more validation errors occurred.\");",
+									"    pm.expect(responseData.status).to.be.eql(400);",
+									"    pm.expect(responseData.errors[\"$.title\"][0]).to.be.eql(\"',' is an invalid start of a value. Path: $.title | LineNumber: 2 | BytePositionInLine: 11.\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Type is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.type).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Type should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Title is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.title).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Title should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Status is a non-negative integer\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.status).to.be.a('number');",
+									"    pm.expect(responseData.status).to.be.at.least(0);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 300,\r\n  \"title\": ,\r\n  \"dueDate\": \"2023-09-17T17:05:09.589Z\",\r\n  \"completed\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base url}}/{{base path}}",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"{{base path}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Activity - Empty Due Date",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 400\", function () {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.type).to.exist.and.to.be.a('string');",
+									"  pm.expect(responseData.title).to.exist.and.to.be.a('string');",
+									"  pm.expect(responseData.status).to.exist.and.to.be.a('number');",
+									"  pm.expect(responseData.traceId).to.exist.and.to.be.a('string');",
+									"  pm.expect(responseData.errors).to.exist.and.to.be.an('object');",
+									"});",
+									"",
+									"pm.test(\"Response has valid information\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.title).to.be.eql(\"One or more validation errors occurred.\");",
+									"    pm.expect(responseData.status).to.be.eql(400);",
+									"    pm.expect(responseData.errors[\"$.dueDate\"][0]).to.be.eql(\"The JSON value could not be converted to System.DateTime. Path: $.dueDate | LineNumber: 3 | BytePositionInLine: 15.\");",
+									"});",
+									"",
+									"pm.test(\"Type is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.type).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Title is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData.title).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Status is a non-negative integer\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData.status).to.be.a('number');",
+									"  pm.expect(responseData.status).to.be.at.least(0);",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 300,\r\n  \"title\": \"Activity 300\",\r\n  \"dueDate\": \"\",\r\n  \"completed\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base url}}/{{base path}}",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"{{base path}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Activity - Empty Complete Value",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Response status code is 400\", function () {",
+									"    pm.expect(pm.response.code).to.equal(400);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate 'type' field is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData.type).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+									"});",
+									"",
+									"pm.test(\"Response has valid information\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.title).to.be.eql(\"One or more validation errors occurred.\");",
+									"    pm.expect(responseData.status).to.be.eql(400);",
+									"    pm.expect(responseData.errors[\"$.completed\"][0]).to.be.eql(\"'}' is an invalid start of a value. Path: $.completed | LineNumber: 5 | BytePositionInLine: 0.\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"The title field is a non-empty string\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData.title).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the 'status' field is a non-negative integer\", function () {",
+									"  const responseData = pm.response.json();",
+									"",
+									"  pm.expect(responseData.status).to.exist.and.to.be.a('number');",
+									"  pm.expect(responseData.status).to.be.at.least(0);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate traceId field is a non-empty string\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.traceId).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Value should not be empty\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": 300,\r\n  \"title\": \"Activity 300\",\r\n  \"dueDate\": \"2023-09-17T17:05:09.589Z\",\r\n  \"completed\": \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base url}}/{{base path}}",
+							"host": [
+								"{{base url}}"
+							],
+							"path": [
+								"{{base path}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
